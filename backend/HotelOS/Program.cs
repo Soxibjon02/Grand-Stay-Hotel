@@ -16,7 +16,10 @@ var builder = WebApplication.CreateBuilder(args);
 // ── CORS — Angular frontendga ruxsat ─────────────────
 // CORS — localhost (dev) + Vercel/Railway (prod)
 var allowedOrigins = builder.Configuration["AllowedOrigins"]?.Split(',') 
-    ?? new[] { "http://localhost:4200" };
+    ?? new[] { 
+        "http://localhost:4200",
+        "https://grand-stay-hotel-ohrgi01ln-david-s-projectsdfg.vercel.app"
+    };
 
 builder.Services.AddCors(opt => opt.AddDefaultPolicy(p =>
     p.WithOrigins(allowedOrigins)
