@@ -14,8 +14,12 @@ using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 
 // ── CORS — Angular frontendga ruxsat ─────────────────
+// CORS — localhost (dev) + Vercel/Railway (prod)
+var allowedOrigins = builder.Configuration["AllowedOrigins"]?.Split(',') 
+    ?? new[] { "http://localhost:4200" };
+
 builder.Services.AddCors(opt => opt.AddDefaultPolicy(p =>
-    p.WithOrigins("http://localhost:4200")
+    p.WithOrigins(allowedOrigins)
      .AllowAnyHeader()
      .AllowAnyMethod()
      .AllowCredentials()));
@@ -79,4 +83,6 @@ Console.WriteLine("║  SignalR: /hotelHub                      ║");
 Console.WriteLine("║  API:     /api/...                       ║");
 Console.WriteLine("╚══════════════════════════════════════════╝");
 
-app.Run();
+// Railway PORT env variable
+var port = Environment.GetEnvironmentVariable("PORT") ?? "5050";
+app.Run($"http://0.0.0.0:{port}");

@@ -1,0 +1,15 @@
+# Node
+frontend/node_modules/
+frontend/.angular/
+frontend/dist/
+
+# .NET build
+backend/**/bin/
+backend/**/obj/
+
+# VS
+.vs/
+*.user
+
+# Env
+.env

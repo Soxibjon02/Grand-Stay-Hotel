@@ -1,0 +1,9 @@
+[build]
+builder = "dockerfile"
+dockerfilePath = "backend/HotelOS/Dockerfile"
+buildCommand = ""
+watchPatterns = ["backend/**"]
+
+[deploy]
+startCommand = "dotnet HotelOS.dll"
+restartPolicyType = "on_failure"
