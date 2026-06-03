@@ -1,10 +1,11 @@
 import { Component, OnInit, signal, inject } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-user-layout',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, CommonModule],
   templateUrl: './user-layout.component.html'
 })
 export class UserLayoutComponent implements OnInit {
@@ -12,6 +13,15 @@ export class UserLayoutComponent implements OnInit {
   isDarkTheme = signal(false);
   isLoggedIn = signal(false);
   guestName = signal('');
+  isMenuOpen = signal(false);
+
+  toggleMenu() {
+    this.isMenuOpen.set(!this.isMenuOpen());
+  }
+
+  closeMenu() {
+    this.isMenuOpen.set(false);
+  }
 
   ngOnInit() {
     this.checkLoginStatus();

@@ -1,22 +1,28 @@
 <div class="app-layout">
   <header class="top-navbar">
-    <div class="navbar-brand">
-      <div class="brand-icon">🏨</div>
-      <div>
-        <div class="brand-name">LuxeManager</div>
+    <div class="navbar-brand-wrapper">
+      <div class="navbar-brand">
+        <div class="brand-icon">🏨</div>
+        <div>
+          <div class="brand-name">LuxeManager</div>
+        </div>
       </div>
+      
+      <button class="burger-menu-btn" (click)="toggleMenu()" [attr.aria-expanded]="isMenuOpen()">
+        <i class="bi" [class.bi-list]="!isMenuOpen()" [class.bi-x]="isMenuOpen()"></i>
+      </button>
     </div>
 
-    <nav class="nav-links">
+    <nav class="nav-links" [class.show]="isMenuOpen()">
       @for (item of navItems; track item.path) {
-        <a [routerLink]="item.path" routerLinkActive="active" class="nav-item">
+        <a [routerLink]="item.path" routerLinkActive="active" (click)="closeMenu()" class="nav-item">
           <i class="bi {{ item.icon }}"></i>
           <span>{{ item.label }}</span>
         </a>
       }
     </nav>
 
-    <div class="navbar-actions">
+    <div class="navbar-actions" [class.show]="isMenuOpen()">
       <div class="theme-toggle" (click)="toggleTheme()" title="Tungi/Kunduzgi rejim">
         @if (isDarkTheme()) {
           <i class="bi bi-sun-fill" style="color: #fbbf24;"></i>

@@ -355,16 +355,77 @@ option { background: var(--bg-secondary); color: var(--text-primary); }
   align-self: center;
 }
 
+.navbar-brand-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.burger-menu-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 26px;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+  align-items: center;
+  justify-content: center;
+  &:hover {
+    background: var(--bg-hover);
+  }
+}
+
 @media (max-width: 992px) {
   .top-navbar {
     flex-direction: column;
+    align-items: stretch;
     height: auto;
     padding: 16px;
-    gap: 16px;
+    gap: 8px;
+
+    .navbar-brand-wrapper {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .burger-menu-btn {
+      display: flex;
+    }
 
     .nav-links {
-      flex-wrap: wrap;
-      justify-content: center;
+      display: none;
+      flex-direction: column;
+      width: 100%;
+      gap: 4px;
+      margin-top: 8px;
+
+      &.show {
+        display: flex;
+      }
+
+      .nav-item {
+        width: 100%;
+        justify-content: flex-start;
+        padding: 12px 16px;
+      }
+    }
+
+    .navbar-actions {
+      display: none;
+      width: 100%;
+      justify-content: space-between;
+      margin-top: 8px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+
+      &.show {
+        display: flex;
+      }
     }
   }
   .hero-banner {
@@ -394,53 +455,17 @@ option { background: var(--bg-secondary); color: var(--text-primary); }
 
 @media (max-width: 576px) {
   .top-navbar {
-    padding: 12px 10px !important;
-    gap: 10px !important;
+    padding: 12px 16px !important;
+    gap: 8px !important;
 
     .navbar-brand {
-      margin-bottom: 4px;
       .brand-icon {
-        width: 32px;
-        height: 32px;
+        width: 36px;
+        height: 36px;
         font-size: 20px;
       }
       .brand-name {
         font-size: 18px;
-      }
-    }
-    
-    .nav-links {
-      width: 100%;
-      overflow-x: auto;
-      white-space: nowrap;
-      justify-content: flex-start !important;
-      padding-bottom: 6px;
-      gap: 4px !important;
-      -webkit-overflow-scrolling: touch;
-      
-      /* Hide scrollbars */
-      &::-webkit-scrollbar {
-        display: none;
-      }
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-
-      .nav-item {
-        flex: 0 0 auto;
-        padding: 6px 10px !important;
-        font-size: 13px !important;
-        gap: 4px !important;
-      }
-    }
-    
-    .navbar-actions {
-      width: 100%;
-      justify-content: space-between;
-      margin-top: 4px;
-      
-      .connection-badge {
-        padding: 4px 10px;
-        font-size: 11px;
       }
     }
   }
@@ -479,6 +504,17 @@ option { background: var(--bg-secondary); color: var(--text-primary); }
     }
   }
 
+  /* Forms Adaptations for Mobile */
+  .form-control, .form-select {
+    padding: 8px 12px !important;
+    font-size: 13px !important;
+  }
+  
+  .form-label {
+    font-size: 12px !important;
+    margin-bottom: 4px !important;
+  }
+
   /* Utility classes & components overrides */
   .mini-stats {
     grid-template-columns: 1fr !important;
@@ -490,4 +526,5 @@ option { background: var(--bg-secondary); color: var(--text-primary); }
     gap: 8px;
   }
 }
+
 

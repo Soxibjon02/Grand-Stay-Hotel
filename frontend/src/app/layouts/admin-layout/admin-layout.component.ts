@@ -12,6 +12,15 @@ import { SignalRService } from '../../services/signalr.service';
 export class AdminLayoutComponent implements OnInit {
   signalR = inject(SignalRService);
   isDarkTheme = signal(false);
+  isMenuOpen = signal(false);
+
+  toggleMenu() {
+    this.isMenuOpen.set(!this.isMenuOpen());
+  }
+
+  closeMenu() {
+    this.isMenuOpen.set(false);
+  }
 
   connectionIcon = computed(() => {
     const s = this.signalR.connectionState();
