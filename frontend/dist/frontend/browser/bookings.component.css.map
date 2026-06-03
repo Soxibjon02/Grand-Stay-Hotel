@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/components/bookings/bookings.component.scss"],
-  "sourcesContent": [".page-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:24px; }\n.page-title  { font-size:22px; font-weight:700; display:flex; align-items:center; gap:10px; i{color:var(--accent);} }\n.page-sub    { color:var(--text-muted); font-size:13px; margin-top:4px; }\n.layout-grid { display:grid; grid-template-columns:320px 1fr; gap:20px;\n               @media(max-width:900px){grid-template-columns:1fr;} }\n.action-btns { display:flex; gap:4px; }\n.res-code    { font-size:11px; background:var(--bg-hover); padding:2px 6px; border-radius:4px; color:var(--accent); }\n"],
-  "mappings": ";AAAA,CAAA;AAAe,WAAA;AAAc,mBAAA;AAA+B,eAAA;AAAwB,iBAAA;;AACpF,CAAA;AAAe,aAAA;AAAgB,eAAA;AAAiB,WAAA;AAAc,eAAA;AAAoB,OAAA;;AAAU,CAA5F,WAA4F;AAAE,SAAA,IAAA;;AAC9F,CAAA;AAAe,SAAA,IAAA;AAAyB,aAAA;AAAgB,cAAA;;AACxD,CAAA;AAAe,WAAA;AAAc,yBAAA,MAAA;AAAiC,OAAA;;AAC/C,QAAA,WAAA;AADf,GAAA;AACuC,2BAAA;;;AACvC,CAAA;AAAe,WAAA;AAAc,OAAA;;AAC7B,CAAA;AAAe,aAAA;AAAgB,cAAA,IAAA;AAA4B,WAAA,IAAA;AAAiB,iBAAA;AAAmB,SAAA,IAAA;;",
-  "names": []
-}
