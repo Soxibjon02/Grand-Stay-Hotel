@@ -1,0 +1,40 @@
+<div class="page-header">
+  <div>
+    <h1 class="page-title"><i class="bi bi-building"></i> Xonalar</h1>
+    <p class="page-sub">GrandStay — 10 xona, 2 qavat</p>
+  </div>
+  <button class="btn btn-outline-secondary btn-sm" (click)="load()">
+    <i class="bi bi-arrow-clockwise"></i> Yangilash
+  </button>
+</div>
+
+@if (loading()) {
+  <div class="loading-state"><i class="bi bi-hourglass-split"></i> Yuklanmoqda...</div>
+}
+
+@if (!loading()) {
+  <div class="rooms-grid">
+    @for (r of rooms(); track r.roomNumber) {
+      <div class="room-tile">
+        <div class="room-tile-header">
+          <div class="room-number">{{ r.roomNumber }}</div>
+          <span class="badge {{ statusCss(r.status, r.cleaningStatus) }}">
+            {{ statusLabel(r.status, r.cleaningStatus) }}
+          </span>
+        </div>
+        <div class="room-style">{{ r.style }}</div>
+        <div class="room-meta">
+          <span><i class="bi bi-layers"></i> {{ r.floor }}-qavat</span>
+          <span><i class="bi bi-tag"></i> ${{ r.bookingPrice }}/tun</span>
+        </div>
+        <div class="room-clean" [ngClass]="{'text-success': (r.cleaningStatus || 'Clean') === 'Clean', 'text-danger': r.cleaningStatus === 'Dirty', 'text-warning': r.cleaningStatus === 'InProgress'}">
+          <i class="bi bi-stars"></i>
+          <strong>{{ r.cleaningStatus || 'Clean' }}</strong>
+        </div>
+      </div>
+    }
+    @if (rooms().length === 0) {
+      <div class="empty-state">Xonalar topilmadi</div>
+    }
+  </div>
+}

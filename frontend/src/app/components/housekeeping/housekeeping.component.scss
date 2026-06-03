@@ -1,0 +1,18 @@
+.page-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:24px; }
+.page-title  { font-size:22px; font-weight:700; display:flex; align-items:center; gap:10px; i{color:var(--warning);} }
+.page-sub    { color:var(--text-muted); font-size:13px; margin-top:4px; }
+.loading-state,.empty-state { text-align:center; color:var(--text-muted); padding:60px; i{margin-right:8px;} }
+.empty-state { display:flex; flex-direction:column; align-items:center; gap:12px; p{font-size:14px;} }
+.tasks-grid  { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px; }
+.task-card {
+  background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:20px;
+  transition:var(--transition);
+  &.done       { border-color:rgba(34,197,94,.3); }
+  &.inprogress { border-color:rgba(56,189,248,.3); }
+  &:hover { border-color:var(--border-hover); }
+}
+.task-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+.room-badge  { font-size:15px; font-weight:700; color:var(--text-primary); }
+.task-desc   { font-size:12px; color:var(--text-secondary); margin-bottom:8px; }
+.task-keeper,.task-time { font-size:11px; color:var(--text-muted); margin-bottom:4px; i{margin-right:4px;} }
+.task-actions { display:flex; gap:8px; margin-top:12px; align-items:center; }

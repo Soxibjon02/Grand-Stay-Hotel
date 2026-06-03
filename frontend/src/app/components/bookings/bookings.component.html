@@ -1,0 +1,115 @@
+<div class="page-header">
+  <div>
+    <h1 class="page-title"><i class="bi bi-calendar-check"></i> Bronlar</h1>
+    <p class="page-sub">Check-in, Check-out va bron boshqaruvi</p>
+  </div>
+  <button class="btn btn-outline-secondary btn-sm" (click)="loadBookings()">
+    <i class="bi bi-arrow-clockwise"></i> Yangilash
+  </button>
+</div>
+
+<div class="layout-grid">
+  <!-- LEFT — forms -->
+  <div class="forms-col">
+
+    <!-- Check-In Card -->
+    <div class="card mb-4">
+      <div class="card-header"><i class="bi bi-box-arrow-in-right text-success"></i> Yangi Check-In</div>
+      <div class="card-body">
+        @if (ciMsg()) {
+          <div class="alert alert-{{ ciType() }} mb-3">{{ ciMsg() }}</div>
+        }
+        <div class="mb-3">
+          <label class="form-label">Mehmon Ismi *</label>
+          <input [(ngModel)]="ci.guestName" class="form-control" placeholder="Ism Familiya"/>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Xona Turi</label>
+          <select [(ngModel)]="ci.roomStyle" class="form-select">
+            @for (s of styleNames; track $index) {
+              <option [value]="$index">{{ s }}</option>
+            }
+          </select>
+        </div>
+        <div class="row g-2 mb-3">
+          <div class="col-6">
+            <label class="form-label">Qavat</label>
+            <select [(ngModel)]="ci.floorPreference" class="form-select">
+              <option value="">Farq qilmaydi</option>
+              <option value="1">1-Qavat</option>
+              <option value="2">2-Qavat</option>
+            </select>
+          </div>
+          <div class="col-6">
+            <label class="form-label">Maxsus xona (ixtiyoriy)</label>
+            <input [(ngModel)]="ci.specificRoomNumber" type="text" class="form-control" placeholder="Masalan: 105" maxlength="3"/>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Muddat (kun) *</label>
+          <input [(ngModel)]="ci.durationInDays" type="number" class="form-control" min="1"/>
+        </div>
+        <button class="btn btn-success w-100" (click)="doCheckIn()">
+          <i class="bi bi-box-arrow-in-right"></i> Check-In Qilish
+        </button>
+      </div>
+    </div>
+
+
+
+  </div>
+
+  <!-- RIGHT — bookings table -->
+  <div class="table-col">
+    <div class="card">
+      <div class="card-header"><i class="bi bi-list-ul"></i> Barcha Bronlar</div>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>#</th><th>Bron №</th><th>Mehmon</th><th>Xona</th>
+              <th>Muddat</th><th>Holat</th><th>Amal</th>
+            </tr>
+          </thead>
+          <tbody>
+            @if (loading()) {
+              <tr><td colspan="7" class="text-center text-muted py-4">Yuklanmoqda...</td></tr>
+            }
+            @for (b of bookings(); track b.id) {
+              <tr>
+                <td class="text-muted">{{ b.id }}</td>
+                <td><code class="res-code">{{ b.reservationNumber || '—' }}</code></td>
+                <td>{{ b.guestName || '—' }}</td>
+                <td><strong>{{ b.roomNumber || '—' }}</strong></td>
+                <td>{{ b.durationInDays }} kun</td>
+                <td><span class="badge {{ statusCss(b.status) }}">{{ statusLabel(b.status) }}</span></td>
+                <td>
+                  <div class="action-btns">
+                    @if (b.status === 'CheckedIn') {
+                      <button class="btn btn-warning btn-sm" (click)="quickCheckout(b.roomNumber)" title="Checkout">
+                        <i class="bi bi-box-arrow-right"></i>
+                      </button>
+                    }
+                    @if (b.status === 'Pending') {
+                      <button class="btn btn-success btn-sm me-1" (click)="confirmBooking(b.id)" title="Tasdiqlash (To'lov olindi)">
+                        <i class="bi bi-check-lg"></i>
+                      </button>
+                    }
+                    @if (b.status === 'Confirmed' || b.status === 'Pending') {
+                      <button class="btn btn-danger btn-sm" (click)="cancelBooking(b.id)" title="Bekor qilish">
+                        <i class="bi bi-x"></i>
+                      </button>
+                    }
+                  </div>
+                </td>
+              </tr>
+            }
+            @if (!loading() && bookings().length === 0) {
+              <tr><td colspan="7" class="text-center text-muted py-4">Bronlar yo'q</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,87 @@
+<div class="page-header">
+  <h1 class="page-title"><i class="bi bi-grid-1x2-fill"></i> Dashboard</h1>
+  <p class="page-sub">LuxeManager mehmonxonasi — real-time monitoring</p>
+</div>
+
+<!-- ── STAT CARDS (Clickable) ─────────────────────── -->
+<div class="stats-grid">
+  <a routerLink="/admin/room-service" class="stat-card blue" style="text-decoration: none; cursor: pointer;">
+    <div class="stat-icon"><i class="bi bi-bag-check"></i></div>
+    <div class="stat-info">
+      <div class="stat-num">{{ stats().activeOrders }}</div>
+      <div class="stat-lbl">Faol Buyurtmalar</div>
+    </div>
+  </a>
+  <a routerLink="/admin/maintenance" class="stat-card red" style="text-decoration: none; cursor: pointer;">
+    <div class="stat-icon"><i class="bi bi-tools"></i></div>
+    <div class="stat-info">
+      <div class="stat-num">{{ stats().openTickets }}</div>
+      <div class="stat-lbl">Ochiq Muammolar</div>
+    </div>
+  </a>
+  <a routerLink="/admin/maintenance" class="stat-card orange" style="text-decoration: none; cursor: pointer;">
+    <div class="stat-icon"><i class="bi bi-exclamation-triangle-fill"></i></div>
+    <div class="stat-info">
+      <div class="stat-num">{{ stats().criticalTickets }}</div>
+      <div class="stat-lbl">Critical</div>
+    </div>
+  </a>
+  <a routerLink="/admin/rooms" class="stat-card gray" style="text-decoration: none; cursor: pointer;">
+    <div class="stat-icon"><i class="bi bi-building"></i></div>
+    <div class="stat-info">
+      <div class="stat-num">{{ rooms().length || 10 }}</div>
+      <div class="stat-lbl">Jami Xonalar</div>
+    </div>
+  </a>
+</div>
+
+<!-- ── ROOM LIST + EVENT FEED ─────────────────────── -->
+<div class="dashboard-grid">
+
+  <!-- Room List (Line format) -->
+  <div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <span><i class="bi bi-building"></i> Xonalar Holati (Real-Time)</span>
+      
+      <div class="d-flex align-items-center gap-3">
+        <div class="legend d-none d-md-flex">
+          <span class="l-dot green"></span> Bo'sh
+          <span class="l-dot blue"></span> Band
+          <span class="l-dot red"></span> Joylashgan
+          <span class="l-dot yellow"></span> Tozalanmoqda
+          <span class="l-dot orange"></span> Ta'mirlash
+        </div>
+        
+        <div class="btn-group btn-group-sm">
+          <button class="btn" [class.btn-primary]="selectedFloor() === 1" [class.btn-outline-primary]="selectedFloor() !== 1" (click)="selectedFloor.set(1)">1-Qavat</button>
+          <button class="btn" [class.btn-primary]="selectedFloor() === 2" [class.btn-outline-primary]="selectedFloor() !== 2" (click)="selectedFloor.set(2)">2-Qavat</button>
+        </div>
+      </div>
+    </div>
+    <div class="card-body p-0">
+      
+      <div class="room-list mt-3">
+        @for (r of visibleRooms(); track r.roomNumber) {
+          <div class="room-list-item {{ roomCss(r) }}">
+            <div class="room-img-wrapper">
+              <img src="https://images.unsplash.com/photo-1590490359683-658d3d23f972?auto=format&fit=crop&w=120&h=80&q=80" alt="Room Image" class="room-img">
+              <div class="room-img-overlay">{{ r.roomNumber }}</div>
+            </div>
+            <div class="room-info">
+              <div class="room-title">Xona {{ r.roomNumber }}</div>
+              <div class="room-desc">{{ r.style }} turi — ${{ r.price }}/tun</div>
+            </div>
+            <div class="room-status">
+              <span class="badge room-badge {{ getBadgeClass(r) }}" style="min-width: 100px; text-align: center; padding: 7px 14px; font-size: 13px; display: inline-block;">{{ getRealStatus(r) }}</span>
+            </div>
+          </div>
+        }
+        @if (visibleRooms().length === 0) {
+          <div class="empty-rooms">Ushbu qavatda xonalar topilmadi...</div>
+        }
+      </div>
+
+    </div>
+  </div>
+
+</div>

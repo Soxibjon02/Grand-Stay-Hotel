@@ -1,0 +1,62 @@
+<div class="page-header">
+  <div>
+    <h1 class="page-title"><i class="bi bi-stars"></i> Tozalash</h1>
+    <p class="page-sub">Xona tozalash vazifalari</p>
+  </div>
+  <button class="btn btn-outline-secondary btn-sm" (click)="load()">
+    <i class="bi bi-arrow-clockwise"></i> Yangilash
+  </button>
+</div>
+
+@if (msg()) {
+  <div class="alert alert-{{ msgType() }} mb-4">{{ msg() }}</div>
+}
+
+@if (loading()) {
+  <div class="loading-state"><i class="bi bi-hourglass-split"></i> Yuklanmoqda...</div>
+}
+
+@if (!loading()) {
+  <div class="tasks-grid">
+    @for (t of tasks(); track t.id) {
+      <div class="task-card" [class.done]="t.status==='Done'" [class.inprogress]="t.status==='InProgress'">
+        <div class="task-header">
+          <div class="room-badge">🚪 {{ t.roomNumber }}</div>
+          <span class="badge {{ statusCss(t.status) }}">
+            <i class="bi {{ statusIcon(t.status) }}"></i> {{ t.status }}
+          </span>
+        </div>
+        <div class="task-desc">{{ t.description }}</div>
+        @if (t.housekeeperName) {
+          <div class="task-keeper"><i class="bi bi-person"></i> {{ t.housekeeperName }}</div>
+        }
+        <div class="task-time"><i class="bi bi-clock"></i> {{ fmtDate(t.createdAt) }}</div>
+
+        @if (t.status === 'Pending') {
+          <div class="task-actions">
+            <select class="form-select form-select-sm" [(ngModel)]="selectedKeeper[t.id]">
+              <option [value]="undefined">Xodim tanlang</option>
+              @for (k of housekeepers(); track k.id) {
+                <option [value]="k.id">{{ k.name }}</option>
+              }
+            </select>
+            <button class="btn btn-info btn-sm" (click)="start(t.id)">
+              <i class="bi bi-play-fill"></i> Boshlash
+            </button>
+          </div>
+        }
+        @if (t.status === 'InProgress') {
+          <button class="btn btn-success btn-sm w-100 mt-2" (click)="complete(t.id)">
+            <i class="bi bi-check-lg"></i> Tugallandi
+          </button>
+        }
+      </div>
+    }
+    @if (tasks().length === 0) {
+      <div class="empty-state">
+        <i class="bi bi-check-circle fs-1 text-success"></i>
+        <p>Hozircha barcha xonalar toza! ✅</p>
+      </div>
+    }
+  </div>
+}

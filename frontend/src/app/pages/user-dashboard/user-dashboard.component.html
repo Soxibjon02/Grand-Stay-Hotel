@@ -1,0 +1,154 @@
+<div class="mb-4 d-flex justify-content-between align-items-center flex-wrap gap-3">
+  <div>
+    <h2>Xush kelibsiz, {{ guestName }}!</h2>
+    <p class="text-muted mb-0">O'zingizga yoqqan xonani tanlab bron qiling yoki buyurtmalaringizni boshqaring.</p>
+  </div>
+</div>
+
+@if (bookingMsg) { <div class="alert alert-success">{{ bookingMsg }}</div> }
+
+<!-- MENING BUYURTMALARIM (Agar mavjud bo'lsa) -->
+@if (myBookings().length > 0) {
+<div class="card mb-4" style="box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+  <div class="card-header" style="background-color: var(--card-bg); border-bottom: 1px solid var(--border-color);">
+    <h5 class="mb-0">Mening Buyurtmalarim</h5>
+  </div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table mb-0">
+        <thead>
+          <tr>
+            <th>Bron raqami</th>
+            <th>Xona</th>
+            <th>Boshlanish</th>
+            <th>Muddati</th>
+            <th>Holat</th>
+            <th class="text-end">Amallar</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (b of myBookings(); track b.id) {
+          <tr>
+            <td>{{ b.reservationNumber }}</td>
+            <td><strong>{{ b.roomNumber }}</strong> <span class="text-muted">({{ b.style }})</span></td>
+            <td>{{ b.startDate | date:'shortDate' }}</td>
+            <td>{{ b.durationInDays }} kun</td>
+            <td><span class="badge" [ngClass]="{'bg-success text-white': b.status==='Confirmed', 'bg-warning text-dark': b.status==='Pending'}">{{ b.status }}</span></td>
+            <td class="text-end">
+              @if (b.status !== 'Canceled' && b.status !== 'CheckedOut') {
+                <button class="btn btn-sm btn-outline-warning" (click)="openIssueForm(b.roomNumber)">Xizmatga xabar</button>
+              }
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+}
+
+<!-- SHIKOYAT YUBORISH FORMASI -->
+@if (selectedRoomForIssue()) {
+<div class="card mb-4 border-warning">
+  <div class="card-header bg-warning text-dark">
+    <h5 class="mb-0">Xona {{ selectedRoomForIssue() }} xizmatiga xabar berish</h5>
+  </div>
+  <div class="card-body">
+    @if (issueMsg) { <div class="alert alert-info">{{ issueMsg }}</div> }
+    
+    <p class="small text-muted mb-2">Bo'limni tanlang</p>
+    <div class="d-flex flex-wrap gap-2 mb-3">
+      <input type="radio" class="btn-check" name="target" id="t-roomservice" value="RoomService" [(ngModel)]="issueTarget">
+      <label class="btn btn-outline-primary rounded-pill px-3 py-1" for="t-roomservice"><i class="bi bi-bell"></i> Xona Xizmati</label>
+
+      <input type="radio" class="btn-check" name="target" id="t-maintenance" value="Maintenance" [(ngModel)]="issueTarget">
+      <label class="btn btn-outline-secondary rounded-pill px-3 py-1" for="t-maintenance"><i class="bi bi-tools"></i> Ta'mirlash Xizmati</label>
+    </div>
+
+    <p class="small text-muted mb-1">Buyurtma Tavsifi *</p>
+    <textarea class="form-control mb-3" rows="3" [(ngModel)]="issueText" placeholder="Masalan: 2 ta qo'shimcha yostiq, suv, yoki chiroq ishlamayapti..."></textarea>
+    
+    <p class="small text-muted mb-2">Muhimlik Darajasi</p>
+    <div class="d-flex flex-wrap gap-2 mb-3">
+      <input type="radio" class="btn-check" name="priority" id="p-oddiy" value="Oddiy" [(ngModel)]="issuePriority">
+      <label class="btn btn-outline-info rounded-pill px-3 py-1" for="p-oddiy"><i class="bi bi-circle"></i> Oddiy</label>
+
+      <input type="radio" class="btn-check" name="priority" id="p-orta" value="O'rta" [(ngModel)]="issuePriority">
+      <label class="btn btn-outline-warning rounded-pill px-3 py-1" for="p-orta"><i class="bi bi-dash-circle"></i> O'rta</label>
+
+      <input type="radio" class="btn-check" name="priority" id="p-shoshilinch" value="Shoshilinch" [(ngModel)]="issuePriority">
+      <label class="btn btn-outline-danger rounded-pill px-3 py-1" for="p-shoshilinch"><i class="bi bi-exclamation-circle"></i> Shoshilinch</label>
+
+      <input type="radio" class="btn-check" name="priority" id="p-kritik" value="Kritik" [(ngModel)]="issuePriority">
+      <label class="btn btn-danger rounded-pill px-3 py-1" for="p-kritik"><i class="bi bi-exclamation-triangle-fill"></i> Kritik</label>
+    </div>
+    <div class="d-flex gap-2">
+      <button class="btn btn-warning" (click)="reportIssue()">Xabar yuborish</button>
+      <button class="btn btn-outline-secondary" (click)="cancelIssue()">Bekor qilish</button>
+    </div>
+  </div>
+</div>
+}
+
+<!-- BO'SH XONALAR -->
+<div class="card mb-4" style="box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+  <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2" style="background-color: var(--card-bg); border-bottom: 1px solid var(--border-color);">
+    <h5 class="mb-0">Bo'sh Xonalar</h5>
+    
+    <!-- Qavat filteri -->
+    <div class="btn-group">
+      <button class="btn btn-sm" [class.btn-primary]="selectedFloor() === 'all'" [class.btn-outline-primary]="selectedFloor() !== 'all'" (click)="setFloor('all')">Barchasi</button>
+      <button class="btn btn-sm" [class.btn-primary]="selectedFloor() === '1'" [class.btn-outline-primary]="selectedFloor() !== '1'" (click)="setFloor('1')">1-Qavat</button>
+      <button class="btn btn-sm" [class.btn-primary]="selectedFloor() === '2'" [class.btn-outline-primary]="selectedFloor() !== '2'" (click)="setFloor('2')">2-Qavat</button>
+    </div>
+  </div>
+  <div class="card-body">
+    
+    @if (selectedRoomToBook()) {
+      <!-- BRON QILISH FORMASI -->
+      <div class="card mb-4 border-primary" style="background-color: var(--card-bg); border-color: var(--border-color);">
+        <div class="card-body">
+          <h5 class="text-primary mb-3">Xona {{ selectedRoomToBook().roomNumber }} ni band qilish</h5>
+          <p class="mb-3 text-muted" style="color: var(--text-color) !important;">{{ selectedRoomToBook().style }} turi — <strong class="text-primary">${{ selectedRoomToBook().nightlyRate }}</strong> / tun</p>
+          
+          <div class="row align-items-end mb-4">
+            <div class="col-md-4">
+              <label class="form-label" style="color: var(--text-color);">Necha kunga?</label>
+              <input type="number" class="form-control" [(ngModel)]="bookingDays" min="1" max="30" style="background-color: var(--bg-color); color: var(--text-color); border-color: var(--border-color);">
+            </div>
+            <div class="col-md-4 mt-3 mt-md-0">
+              <label class="form-label" style="color: var(--text-color);">Jami narx:</label>
+              <h4 class="mb-0 text-primary">${{ selectedRoomToBook().nightlyRate * bookingDays() }}</h4>
+            </div>
+          </div>
+          
+          <div class="d-flex gap-2">
+            <button class="btn btn-primary px-4" (click)="confirmBooking()">Tasdiqlash</button>
+            <button class="btn btn-outline-secondary" (click)="cancelBooking()">Bekor qilish</button>
+          </div>
+        </div>
+      </div>
+    } @else {
+      <!-- XONALAR RO'YXATI -->
+      <div class="row">
+        @for (r of filteredRooms(); track r.id) {
+          <div class="col-md-4 mb-3">
+            <div class="card h-100" style="transition: transform 0.2s;">
+              <div class="card-body text-center">
+                <div class="display-6 mb-2 text-primary">🚪 {{ r.roomNumber }}</div>
+                <h6 class="card-title">{{ r.style }} turi</h6>
+                <p class="card-text text-muted mb-3">${{ r.nightlyRate }} / tun</p>
+                <button class="btn btn-outline-primary w-100" (click)="openBookingForm(r)">Band qilish</button>
+              </div>
+            </div>
+          </div>
+        }
+        @if (filteredRooms().length === 0) {
+          <div class="col-12 text-center text-muted py-4">Siz qidirgan qavatda bo'sh xonalar topilmadi.</div>
+        }
+      </div>
+    }
+
+  </div>
+</div>

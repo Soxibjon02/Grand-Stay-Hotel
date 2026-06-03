@@ -1,0 +1,51 @@
+<div class="app-layout">
+  <header class="top-navbar">
+    <div class="navbar-brand">
+      <div class="brand-icon">🏨</div>
+      <div>
+        <div class="brand-name">LuxeHotel</div>
+      </div>
+    </div>
+
+    <nav class="nav-links">
+      @if (!isLoggedIn()) {
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-item">
+          <i class="bi bi-house-door"></i> Bosh sahifa
+        </a>
+        <a routerLink="/login" routerLinkActive="active" class="nav-item">
+          <i class="bi bi-box-arrow-in-right"></i> Kirish
+        </a>
+        <a routerLink="/register" routerLinkActive="active" class="nav-item">
+          <i class="bi bi-person-plus"></i> Ro'yxatdan o'tish
+        </a>
+      } @else {
+        <a routerLink="/user-dashboard" routerLinkActive="active" class="nav-item">
+          <i class="bi bi-speedometer2"></i> Dashboard
+        </a>
+        <a href="javascript:void(0)" (click)="logout()" class="nav-item text-danger">
+          <i class="bi bi-box-arrow-right"></i> Chiqish
+        </a>
+      }
+    </nav>
+
+    <div class="navbar-actions">
+      <div class="theme-toggle" (click)="toggleTheme()" title="Tungi/Kunduzgi rejim">
+        @if (isDarkTheme()) {
+          <i class="bi bi-sun-fill" style="color: #fbbf24;"></i>
+        } @else {
+          <i class="bi bi-moon-stars-fill" style="color: #6366f1;"></i>
+        }
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="hero-banner">
+      <img src="assets/images/hero.jpg" alt="Hotel Banner">
+      <div class="hero-overlay"></div>
+    </div>
+    <div class="content-container">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</div>

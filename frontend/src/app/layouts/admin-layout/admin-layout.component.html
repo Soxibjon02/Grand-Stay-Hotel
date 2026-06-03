@@ -1,0 +1,43 @@
+<div class="app-layout">
+  <header class="top-navbar">
+    <div class="navbar-brand">
+      <div class="brand-icon">🏨</div>
+      <div>
+        <div class="brand-name">LuxeManager</div>
+      </div>
+    </div>
+
+    <nav class="nav-links">
+      @for (item of navItems; track item.path) {
+        <a [routerLink]="item.path" routerLinkActive="active" class="nav-item">
+          <i class="bi {{ item.icon }}"></i>
+          <span>{{ item.label }}</span>
+        </a>
+      }
+    </nav>
+
+    <div class="navbar-actions">
+      <div class="theme-toggle" (click)="toggleTheme()" title="Tungi/Kunduzgi rejim">
+        @if (isDarkTheme()) {
+          <i class="bi bi-sun-fill" style="color: #fbbf24;"></i>
+        } @else {
+          <i class="bi bi-moon-stars-fill" style="color: #6366f1;"></i>
+        }
+      </div>
+      <div class="connection-badge" [class]="signalR.connectionState()">
+        <i class="bi {{ connectionIcon().icon }} {{ connectionIcon().cls }}"></i>
+        <span class="d-none d-md-inline">{{ connectionIcon().label }}</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="hero-banner">
+      <img src="assets/images/hero.jpg" alt="Hotel Banner">
+      <div class="hero-overlay"></div>
+    </div>
+    <div class="content-container">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</div>

@@ -1,0 +1,115 @@
+<div class="page-header">
+  <div>
+    <h1 class="page-title"><i class="bi bi-tools"></i> Texnik Xizmat</h1>
+    <p class="page-sub">Ta'mirlash va texnik muammolar ticketlari</p>
+  </div>
+  <button class="btn btn-outline-secondary btn-sm" (click)="load()">
+    <i class="bi bi-arrow-clockwise"></i> Yangilash
+  </button>
+</div>
+
+@if (msg()) {
+  <div class="alert alert-{{ msgType() }} mb-4">{{ msg() }}</div>
+}
+
+<div class="layout-grid">
+  <!-- LEFT — create ticket form -->
+  <div>
+    <div class="card">
+      <div class="card-header"><i class="bi bi-plus-circle text-warning"></i> Yangi Ticket</div>
+      <div class="card-body">
+        <div class="mb-3">
+          <label class="form-label">Xona Raqami *</label>
+          <input [(ngModel)]="form.roomNumber" class="form-control" placeholder="Masalan: 201" maxlength="3"/>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Kategoriya</label>
+          <select [(ngModel)]="form.category" class="form-select">
+            @for (cat of categories; track $index) {
+              <option [value]="cat">{{ cat }}</option>
+            }
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Tavsif *</label>
+          <textarea [(ngModel)]="form.description" class="form-control" rows="3"
+                    placeholder="Muammoni batafsil tavsiflang..."></textarea>
+        </div>
+        <div class="mb-4">
+          <label class="form-label">Muhimlik</label>
+          <div class="priority-pills">
+            @for (p of priorities; track p.value) {
+              <button class="priority-pill" [class.active]="form.priority === p.value"
+                      (click)="form.priority = p.value">
+                <i class="bi {{ p.icon }} {{ p.cls }}"></i> {{ p.label }}
+              </button>
+            }
+          </div>
+        </div>
+        <button class="btn btn-warning w-100" (click)="submit()">
+          <i class="bi bi-ticket-perforated"></i> Ticket Yaratish
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT — tickets list with filters -->
+  <div>
+    <!-- filter tabs -->
+    <div class="filter-tabs mb-3">
+      @for (tab of [{k:'all',l:'Barchasi'},{k:'Pending',l:'Kutilmoqda'},{k:'InProgress',l:'Bajarilmoqda'},{k:'Completed',l:'Bajarildi'}]; track tab.k) {
+        <button class="filter-tab" [class.active]="filterStatus()===tab.k"
+                (click)="filterStatus.set(tab.k)">
+          {{ tab.l }}
+          <span class="count-badge">{{ countByStatus(tab.k) }}</span>
+        </button>
+      }
+    </div>
+
+    @if (loading()) {
+      <div class="loading-state"><i class="bi bi-hourglass-split"></i> Yuklanmoqda...</div>
+    }
+    @if (!loading()) {
+      <div class="tickets-list">
+        @for (t of filtered(); track t.id) {
+          <div class="ticket-card" [class.done]="t.status==='Completed'" [class.inprogress]="t.status==='InProgress'">
+            <div class="ticket-top">
+              <div class="ticket-left">
+                <span class="ticket-id">#{{ t.id }}</span>
+                <span class="ticket-room">🚪 Xona {{ t.roomNumber }}</span>
+                <span class="category-badge">{{ t.category }}</span>
+              </div>
+              <div class="ticket-badges">
+                <span class="badge priority-badge priority-{{ t.priority }}">
+                  <i class="bi {{ priorityInfo(t.priority).icon }}"></i>
+                  {{ priorityInfo(t.priority).label }}
+                </span>
+                <span class="badge {{ statusCss(t.status) }}">
+                  {{ statusLabel(t.status) }}
+                </span>
+              </div>
+            </div>
+            <div class="ticket-desc">{{ t.description }}</div>
+            <div class="ticket-meta">
+              <span><i class="bi bi-clock"></i> {{ fmtDate(t.reportedAt) }}</span>
+              @if (t.technicianName) {
+                <span><i class="bi bi-person-gear"></i> {{ t.technicianName }}</span>
+              }
+            </div>
+            @if (canComplete(t.status)) {
+              <button class="btn btn-success btn-sm mt-2" (click)="complete(t.id)">
+                <i class="bi bi-check-lg"></i> Tugatildi
+              </button>
+            }
+          </div>
+        }
+        @if (filtered().length === 0) {
+          <div class="empty-state">
+            <i class="bi bi-tools fs-1 text-muted"></i>
+            <p>Bu kategoriyada ticketlar yo'q</p>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>

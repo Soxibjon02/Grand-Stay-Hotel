@@ -1,0 +1,56 @@
+.page-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:24px; }
+.page-title  { font-size:22px; font-weight:700; display:flex; align-items:center; gap:10px; i{color:var(--accent);} }
+.page-sub    { color:var(--text-muted); font-size:13px; margin-top:4px; }
+
+.layout-grid {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 20px;
+  @media(max-width:900px) { grid-template-columns: 1fr; }
+}
+
+/* priority pills */
+.priority-pills { display:flex; gap:8px; flex-wrap:wrap; }
+.priority-pill {
+  padding:6px 12px; border-radius:20px; font-size:12px; cursor:pointer;
+  border:1px solid var(--border); background:var(--bg-hover); color:var(--text-secondary);
+  transition:var(--transition);
+  &.active { border-color:var(--accent); background:var(--accent-glow); color:var(--accent); }
+  &:hover  { border-color:var(--border-hover); }
+}
+
+/* mini stats */
+.mini-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+.mini-stat  { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:12px; text-align:center; }
+.mini-num   { display:block; font-size:22px; font-weight:700; }
+.mini-lbl   { font-size:11px; color:var(--text-muted); }
+
+/* orders list */
+.orders-list { display:flex; flex-direction:column; gap:12px; }
+.order-card {
+  background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:16px;
+  transition:var(--transition);
+  &.done       { border-color:rgba(34,197,94,.3); }
+  &.inprogress { border-color:rgba(56,189,248,.3); }
+  &:hover { border-color:var(--border-hover); }
+}
+.order-top   { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.order-room  { font-size:15px; font-weight:700; color:var(--text-primary); }
+.order-badges{ display:flex; gap:6px; flex-wrap:wrap; }
+.order-desc  { font-size:13px; color:var(--text-secondary); margin-bottom:8px; line-height:1.5; }
+.order-meta  { display:flex; gap:12px; font-size:11px; color:var(--text-muted); i{margin-right:3px;} }
+
+/* priority badge colors */
+.priority-badge { font-size:10px; }
+.priority-0 { background:rgba(100,116,139,.2); color:#94a3b8; }
+.priority-1 { background:rgba(245,158,11,.15); color:#f59e0b; }
+.priority-2 { background:rgba(239,68,68,.15); color:#ef4444; }
+.priority-3 { background:rgba(239,68,68,.25); color:#f87171; animation:pulse 1.5s infinite; }
+
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:.6;} }
+
+/* status-danger for canceled orders */
+.status-danger { background:rgba(239,68,68,.15); color:#ef4444; border:none; }
+
+.loading-state,.empty-state { text-align:center; color:var(--text-muted); padding:60px; i{margin-right:8px;} }
+.empty-state { display:flex; flex-direction:column; align-items:center; gap:12px; p{font-size:14px;} }
