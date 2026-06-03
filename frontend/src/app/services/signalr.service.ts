@@ -17,8 +17,12 @@ export class SignalRService {
   latestStats     = signal<any>(null);
 
   constructor() {
+    const backendUrl = typeof window !== 'undefined' && window.location.hostname !== 'localhost'
+      ? 'https://grand-stay-hotel-production.up.railway.app'
+      : 'http://localhost:5050';
+
     this.hub = new signalR.HubConnectionBuilder()
-      .withUrl('http://localhost:5050/hotelHub', {
+      .withUrl(`${backendUrl}/hotelHub`, {
         skipNegotiation: false,
         transport: signalR.HttpTransportType.WebSockets
       })

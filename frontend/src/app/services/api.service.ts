@@ -7,8 +7,11 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, of, tap } from 'rxjs';
 import { SignalRService } from './signalr.service';
 
-// Bitta backend URL — microservice emas, modular monolith
-const API = 'http://localhost:5050';
+// Bitta backend URL — localhost (dev) yoki Railway (prod)
+const API = typeof window !== 'undefined' && window.location.hostname !== 'localhost'
+  ? 'https://grand-stay-hotel-production.up.railway.app'
+  : 'http://localhost:5050';
+
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
